@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NEET Counselling</title>
+  <link rel="stylesheet" href="style3.css" />
+  <!-- AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+  <header>
+    <div class="logo">NEET NAVIGATOR HUB</div>
+    <nav>
+      <a href="#">Home</a>
+      <!-- <a href="#appointment-form" class="btn">Appointment</a> -->
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="overlay">
+      <div class="content">
+        <h4>WELCOME TO NEET NAVIGATOR HUB</h4>
+        <h3>A better future awaits !!</h3><br><br>
+        <p>Why Choose us??
+          <ul>
+            <li>
+              One to One interactive sessions
+            </li>
+            <li>
+              Counsellors with 10+ years experience
+            </li>
+          </ul></p>
+        <a href="#appointment-form" class="cta">Make an appointment</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="appointment-form" class="form-section" data-aos="fade-up" data-aos-duration="1000">
+    <div class="form-container" data-aos="zoom-in" data-aos-delay="200">
+      <h2>Get Personalised NEET Counselling</h2>
+      <form id="neet-form">
+        <input type="text" name="name" placeholder="Full Name" required />
+        <input type="email" name="email" placeholder="Email Address" required />
+        <input type="tel" name="phone" placeholder="Phone Number" required />
+
+        <!-- Searchable Dropdown -->
+        <div class="dropdown-container">
+          <input type="text" id="stateInput" placeholder="Search State..." required autocomplete="off" />
+          <div class="dropdown-list" id="stateDropdown"></div>
+        </div>
+        <input type="hidden" name="state" id="selectedState" required />
+
+        <input type="number" name="rank" placeholder="NEET Rank" required />
+        <textarea name="queries" placeholder="Any other queries..." rows="4"></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- AOS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init();</script>
+
+  <!-- JavaScript for Dropdown + Google Sheet -->
+  <script>
+    const states = [
+      "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+      "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+      "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
+      "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+      "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
+      "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman & Nicobar Islands",
+      "Chandigarh", "Dadra & Nagar Haveli", "Daman & Diu", "Delhi",
+      "Jammu & Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+    ];
+
+    const stateInput = document.getElementById("stateInput");
+    const dropdown = document.getElementById("stateDropdown");
+    const hiddenState = document.getElementById("selectedState");
+
+    stateInput.addEventListener("input", () => {
+      const value = stateInput.value.toLowerCase();
+      dropdown.innerHTML = '';
+      const filtered = states.filter(state => state.toLowerCase().includes(value));
+      filtered.forEach(state => {
+        const div = document.createElement("div");
+        div.classList.add("dropdown-item");
+        div.textContent = state;
+        div.onclick = () => {
+          stateInput.value = state;
+          hiddenState.value = state;
+          dropdown.innerHTML = '';
+        };
+        dropdown.appendChild(div);
+      });
+      dropdown.style.display = filtered.length ? "block" : "none";
+      if (!filtered.includes(stateInput.value)) hiddenState.value = '';
+    });
+
+    document.addEventListener("click", e => {
+      if (!e.target.closest(".dropdown-container")) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzOCbIGsHsoAywnL9OZ22m_6OGNJdXAo3lqcy9zfNkq5TFA8xASmMFJWbOTZ4XTdH2x/exec'; // Replace this
+    const form = document.getElementById("neet-form");
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+
+      // Force selection only from dropdown
+      if (!states.includes(stateInput.value)) {
+        alert("Please select a valid state from the dropdown.");
+        return;
+      }
+
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        state: hiddenState.value,
+        rank: form.rank.value,
+        queries: form.queries.value
+      };
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify(data)
+      })
+      .then(response => alert("Form submitted successfully!"))
+      .catch(error => alert("Error: " + error.message));
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
