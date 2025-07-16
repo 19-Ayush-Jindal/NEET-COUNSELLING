@@ -9,17 +9,15 @@
 <meta name="robots" content="index, follow">
 <meta name="author" content="NEET Navigator Hub">
 
-  <link rel="stylesheet" href="style3.css" />
-  <!-- AOS CSS -->
+    <link rel="stylesheet" href="final.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
-
 <body>
   <header>
     <div class="logo">NEET NAVIGATOR HUB</div>
     <nav>
       <a href="#">Home</a>
-      <!-- <a href="#appointment-form" class="btn">Appointment</a> -->
     </nav>
   </header>
 
@@ -30,13 +28,10 @@
         <h3>A better future awaits !!</h3><br><br>
         <p>Why Choose us??
           <ul>
-            <li>
-              One to One interactive sessions
-            </li>
-            <li>
-              Counsellors with 10+ years experience
-            </li>
-          </ul></p>
+            <li>One to One interactive sessions</li>
+            <li>Counsellors with 10+ years experience</li>
+          </ul>
+        </p>
         <a href="#appointment-form" class="cta">Make an appointment</a>
       </div>
     </div>
@@ -50,35 +45,72 @@
         <input type="email" name="email" placeholder="Email Address" required />
         <input type="tel" name="phone" placeholder="Phone Number" required />
 
-        <!-- Searchable Dropdown -->
         <div class="dropdown-container">
           <input type="text" id="stateInput" placeholder="Search State..." required autocomplete="off" />
           <div class="dropdown-list" id="stateDropdown"></div>
         </div>
         <input type="hidden" name="state" id="selectedState" required />
-
         <input type="number" name="rank" placeholder="NEET Rank" required />
+
+        <div class="preferences-group ">
+          <!-- <label for="pref1">Course Preferences:</label> -->
+          <br>
+          <select name="pref1" required>
+            <option value="">Select 1st Preference</option>
+            <option>MBBS</option>
+            <option>BDS</option>
+            <option>BAMS</option>
+            <option>BHMS</option>
+            <option>BVSc</option>
+            <option>BPT</option>
+          </select>
+          <br>
+          <select name="pref2" required>
+            <option value="">Select 2nd Preference</option>
+            <option>MBBS</option>
+            <option>BDS</option>
+            <option>BAMS</option>
+            <option>BHMS</option>
+            <option>BVSc</option>
+            <option>BPT</option>
+          </select>
+          <br>
+          <select name="pref3" required>
+            <option value="">Select 3rd Preference</option>
+            <option>MBBS</option>
+            <option>BDS</option>
+            <option>BAMS</option>
+            <option>BHMS</option>
+            <option>BVSc</option>
+            <option>BPT</option>
+          </select>
+          <br>
+          <select name="pref4" required>
+            <option value="">Select 4th Preference</option>
+            <option>MBBS</option>
+            <option>BDS</option>
+            <option>BAMS</option>
+            <option>BHMS</option>
+            <option>BVSc</option>
+            <option>BPT</option>
+          </select>
+        </div>
+
         <textarea name="queries" placeholder="Any other queries..." rows="4"></textarea>
         <button type="submit">Submit</button>
       </form>
     </div>
   </section>
 
-  <!-- AOS JS -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>AOS.init();</script>
 
-  <!-- JavaScript for Dropdown + Google Sheet -->
   <script>
     const states = [
-      "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-      "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
-      "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
-      "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
-      "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
-      "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman & Nicobar Islands",
-      "Chandigarh", "Dadra & Nagar Haveli", "Daman & Diu", "Delhi",
-      "Jammu & Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+      "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+      "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+      "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman & Nicobar Islands",
+      "Chandigarh", "Dadra & Nagar Haveli", "Daman & Diu", "Delhi", "Jammu & Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
     ];
 
     const stateInput = document.getElementById("stateInput");
@@ -110,15 +142,27 @@
       }
     });
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzOCbIGsHsoAywnL9OZ22m_6OGNJdXAo3lqcy9zfNkq5TFA8xASmMFJWbOTZ4XTdH2x/exec'; // Replace this
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzlgvkFeAdyzqUDayy9hDW4hQfmJefvwMKw6Si4z1iHKW13W2hcZb9AucqKO2XEr-yA/exec';
     const form = document.getElementById("neet-form");
 
     form.addEventListener("submit", e => {
       e.preventDefault();
 
-      // Force selection only from dropdown
       if (!states.includes(stateInput.value)) {
         alert("Please select a valid state from the dropdown.");
+        return;
+      }
+
+      const preferences = [
+        form.pref1.value,
+        form.pref2.value,
+        form.pref3.value,
+        form.pref4.value
+      ];
+
+      const uniquePreferences = new Set(preferences);
+      if (uniquePreferences.size !== preferences.length) {
+        alert("Please select different courses for each preference.");
         return;
       }
 
@@ -128,12 +172,21 @@
         phone: form.phone.value,
         state: hiddenState.value,
         rank: form.rank.value,
-        queries: form.queries.value
+        queries: form.queries.value,
+        preference1: form.pref1.value,
+        preference2: form.pref2.value,
+        preference3: form.pref3.value,
+        preference4: form.pref4.value
       };
+
+      const formData = new FormData();
+      for (const key in data) {
+        formData.append(key, data[key]);
+      }
 
       fetch(scriptURL, {
         method: 'POST',
-        body: JSON.stringify(data)
+        body: formData
       })
       .then(response => alert("Form submitted successfully!"))
       .catch(error => alert("Error: " + error.message));
